@@ -147,6 +147,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    contain: layout style paint;
+    will-change: scroll-position;
 }
 
 .pdf-loading {
@@ -173,6 +175,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    contain: layout style paint;
+    content-visibility: auto;
 }
 
 .pdf-page-number {
@@ -194,6 +198,11 @@ body {
     display: block;
     margin: 0 auto;
     background: white;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    will-change: transform;
+    transform: translateZ(0); /* Hardware acceleration */
+    backface-visibility: hidden;
 }
 
 .pdf-viewer-placeholder {
