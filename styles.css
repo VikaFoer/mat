@@ -140,12 +140,60 @@ body {
 .materials-container {
     background: white;
     border-radius: 12px;
-    padding: 0;
+    padding: 20px;
     flex: 1;
-    overflow: hidden;
+    overflow-y: auto;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    gap: 20px;
+}
+
+.pdf-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #667eea;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.pdf-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: #e74c3c;
+}
+
+.pdf-error p {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.pdf-page-wrapper {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pdf-page-number {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.pdf-page-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: block;
+    margin: 0 auto;
+    background: white;
 }
 
 .pdf-viewer-placeholder {

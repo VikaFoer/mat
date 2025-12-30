@@ -1,3 +1,75 @@
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Function to render PDF pages as images
+async function renderPDFAsImages(pdfPath, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Container ${containerId} not found`);
+        return;
+    }
+
+    // Show loading message
+    container.innerHTML = '<div class="pdf-loading">Завантаження PDF...</div>';
+
+    try {
+        // Load PDF
+        const loadingTask = pdfjsLib.getDocument(pdfPath);
+        const pdf = await loadingTask.promise;
+        const numPages = pdf.numPages;
+
+        // Clear loading message
+        container.innerHTML = '';
+
+        // Render each page
+        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better quality
+
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Render page to canvas
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+            await page.render(renderContext).promise;
+
+            // Convert canvas to image
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL('image/png');
+            img.className = 'pdf-page-image';
+            img.alt = `Сторінка ${pageNum} з ${numPages}`;
+
+            // Add page number
+            const pageWrapper = document.createElement('div');
+            pageWrapper.className = 'pdf-page-wrapper';
+            const pageNumber = document.createElement('div');
+            pageNumber.className = 'pdf-page-number';
+            pageNumber.textContent = `Сторінка ${pageNum} з ${numPages}`;
+            
+            pageWrapper.appendChild(pageNumber);
+            pageWrapper.appendChild(img);
+            container.appendChild(pageWrapper);
+        }
+    } catch (error) {
+        console.error('Error loading PDF:', error);
+        container.innerHTML = `
+            <div class="pdf-error">
+                <p>Помилка завантаження PDF: ${error.message}</p>
+                <a href="${pdfPath}" target="_blank" class="pdf-download-link">
+                    📄 Відкрити PDF у новому вікні
+                </a>
+            </div>
+        `;
+    }
+}
+
 // Tab switching functionality
 document.addEventListener('DOMContentLoaded', function() {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -26,6 +98,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    // Load PDF for lecture 1
+    renderPDFAsImages('Лекція1(Основи теорії множин).pdf', 'lecture1-pages');
 });
 
 // Function to add PDF content to a specific lecture tab
@@ -58,7 +133,7 @@ function addPDFContent(lectureId, content) {
     materialsContainer.appendChild(contentDiv);
 }
 
-// Function to add PDF file viewer to a specific lecture tab
+// Function to add PDF file viewer to a specific lecture tab (renders as images)
 function addPDFViewer(lectureId, pdfPath) {
     const lectureTab = document.getElementById(lectureId);
     if (!lectureTab) {
@@ -72,41 +147,18 @@ function addPDFViewer(lectureId, pdfPath) {
         return;
     }
 
+    // Create container ID for this PDF
+    const containerId = `${lectureId}-pages`;
+    materialsContainer.id = containerId;
+
     // Remove placeholder if exists
     const placeholder = materialsContainer.querySelector('.pdf-viewer-placeholder');
     if (placeholder) {
         placeholder.remove();
     }
 
-    // Create object element for PDF viewer with fallback
-    const object = document.createElement('object');
-    object.className = 'pdf-viewer';
-    object.data = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
-    object.type = 'application/pdf';
-
-    // Create iframe fallback
-    const iframe = document.createElement('iframe');
-    iframe.className = 'pdf-viewer';
-    iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
-    iframe.type = 'application/pdf';
-
-    // Create link fallback
-    const fallback = document.createElement('p');
-    fallback.className = 'pdf-fallback';
-    const link = document.createElement('a');
-    link.href = pdfPath;
-    link.target = '_blank';
-    link.className = 'pdf-download-link';
-    link.textContent = '📄 Відкрити PDF у новому вікні';
-    fallback.appendChild(document.createTextNode('Ваш браузер не підтримує відображення PDF. '));
-    fallback.appendChild(link);
-
-    object.appendChild(iframe);
-    object.appendChild(fallback);
-
-    // Clear and add new content
-    materialsContainer.innerHTML = '';
-    materialsContainer.appendChild(object);
+    // Render PDF as images
+    renderPDFAsImages(pdfPath, containerId);
 }
 
 // Export functions for use

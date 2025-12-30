@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Дискретна математика - Навчальний портал</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -70,16 +71,8 @@
             <!-- Лекція 1 -->
             <div class="tab-content active" id="lecture1">
                 <h2>Лекція 1: Основи теорії множин</h2>
-                <div class="materials-container">
-                    <object class="pdf-viewer" data="Лекція1(Основи теорії множин).pdf#toolbar=1&navpanes=1&scrollbar=1" type="application/pdf">
-                        <iframe class="pdf-viewer" src="Лекція1(Основи теорії множин).pdf#toolbar=1&navpanes=1&scrollbar=1" type="application/pdf"></iframe>
-                        <p class="pdf-fallback">
-                            Ваш браузер не підтримує відображення PDF. 
-                            <a href="Лекція1(Основи теорії множин).pdf" target="_blank" class="pdf-download-link">
-                                📄 Відкрити PDF у новому вікні
-                            </a>
-                        </p>
-                    </object>
+                <div class="materials-container" id="lecture1-pages">
+                    <div class="pdf-loading">Завантаження PDF...</div>
                 </div>
             </div>
 
