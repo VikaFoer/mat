@@ -78,15 +78,35 @@ function addPDFViewer(lectureId, pdfPath) {
         placeholder.remove();
     }
 
-    // Create iframe for PDF viewer
+    // Create object element for PDF viewer with fallback
+    const object = document.createElement('object');
+    object.className = 'pdf-viewer';
+    object.data = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
+    object.type = 'application/pdf';
+
+    // Create iframe fallback
     const iframe = document.createElement('iframe');
     iframe.className = 'pdf-viewer';
-    iframe.src = pdfPath;
+    iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
     iframe.type = 'application/pdf';
+
+    // Create link fallback
+    const fallback = document.createElement('p');
+    fallback.className = 'pdf-fallback';
+    const link = document.createElement('a');
+    link.href = pdfPath;
+    link.target = '_blank';
+    link.className = 'pdf-download-link';
+    link.textContent = '📄 Відкрити PDF у новому вікні';
+    fallback.appendChild(document.createTextNode('Ваш браузер не підтримує відображення PDF. '));
+    fallback.appendChild(link);
+
+    object.appendChild(iframe);
+    object.appendChild(fallback);
 
     // Clear and add new content
     materialsContainer.innerHTML = '';
-    materialsContainer.appendChild(iframe);
+    materialsContainer.appendChild(object);
 }
 
 // Export functions for use
