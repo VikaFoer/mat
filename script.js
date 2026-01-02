@@ -84,6 +84,9 @@ async function renderPage(pdf, pageNum, numPages, container, scale) {
     }
 }
 
+// Track loaded PDFs to prevent recursion
+const loadedPDFs = new Set();
+
 // Function to render PDF pages as images with progressive loading
 async function renderPDFAsImages(pdfPath, containerId) {
     const container = document.getElementById(containerId);
@@ -92,18 +95,30 @@ async function renderPDFAsImages(pdfPath, containerId) {
         return;
     }
 
+    // Prevent loading the same PDF multiple times
+    const pdfKey = `${pdfPath}-${containerId}`;
+    if (loadedPDFs.has(pdfKey)) {
+        console.log(`PDF ${pdfPath} already loaded, skipping`);
+        return;
+    }
+    loadedPDFs.add(pdfKey);
+
     // On production, use iframe directly to avoid CSP issues
     if (isProduction) {
         container.innerHTML = '';
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
+        // Remove navpanes to prevent recursion/navigation issues
+        iframe.src = pdfPath + '#toolbar=1&scrollbar=1';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
         iframe.style.height = '800px';
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
+        // Add sandbox to prevent navigation issues
+        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
+        iframe.setAttribute('loading', 'lazy');
         
         const fallbackLink = document.createElement('p');
         fallbackLink.className = 'pdf-fallback';
@@ -224,13 +239,17 @@ async function renderPDFAsImages(pdfPath, containerId) {
         // Create iframe as primary fallback (works better than object in most browsers)
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
+        // Remove navpanes to prevent recursion/navigation issues
+        iframe.src = pdfPath + '#toolbar=1&scrollbar=1';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
         iframe.style.height = '800px';
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
+        // Add sandbox to prevent navigation issues
+        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
+        iframe.setAttribute('loading', 'lazy');
         
         // Add error handler for iframe
         iframe.onerror = () => {
