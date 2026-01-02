@@ -9,8 +9,9 @@ const isLocalhost = window.location.hostname === 'localhost' ||
                    window.location.hostname === '127.0.0.1' ||
                    window.location.hostname === '';
 
-// Configure PDF.js worker - use main thread on production to avoid CSP issues
-if (typeof pdfjsLib !== 'undefined') {
+// Configure PDF.js worker - don't set worker on production to force main thread usage
+// This avoids CSP issues with blob: URLs
+if (typeof pdfjsLib !== 'undefined' && !isProduction) {
     try {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     } catch (e) {
