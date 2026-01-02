@@ -23,80 +23,54 @@ body {
     height: calc(100vh - 40px);
 }
 
-.main-wrapper {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    width: 100%;
-}
-
 .sidebar {
-    width: 320px;
+    width: 300px;
     background: #f5f5f5;
     border-right: 2px solid #e0e0e0;
     overflow-y: auto;
     flex-shrink: 0;
 }
 
-.tabs {
-    display: flex;
-    flex-direction: column;
-    padding: 20px 10px;
-    gap: 8px;
-}
-
-.tab-button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    border: none;
-    background: white;
+.nav-title {
+    padding: 25px 20px 15px;
     color: #667eea;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 0.95em;
+    font-size: 1.5em;
+    font-weight: 700;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.lectures-list {
+    list-style: none;
+    padding: 0;
+}
+
+.lectures-list li {
+    margin: 0;
+}
+
+.lecture-link {
+    display: block;
+    padding: 15px 20px;
+    color: #667eea;
+    text-decoration: none;
     font-weight: 600;
+    font-size: 0.95em;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
-    text-align: left;
-    width: 100%;
+    border-left: 3px solid transparent;
 }
 
-.tab-button:hover {
+.lecture-link:hover {
     background: #f0f0f0;
-    transform: translateX(5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left-color: #667eea;
+    padding-left: 25px;
 }
 
-.tab-button.active {
+.lecture-link.active {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border-color: #667eea;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    transform: translateX(5px);
-}
-
-.lecture-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 0.9em;
-    flex-shrink: 0;
-}
-
-.tab-button.active .lecture-number {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.lecture-title {
-    flex: 1;
-    line-height: 1.4;
+    border-left-color: #764ba2;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .content {
@@ -106,15 +80,13 @@ body {
     background: #fafafa;
 }
 
-.tab-content {
+.lecture-content {
     display: none;
     animation: fadeIn 0.3s ease;
-    height: 100%;
 }
 
-.tab-content.active {
-    display: flex;
-    flex-direction: column;
+.lecture-content.active {
+    display: block;
 }
 
 @keyframes fadeIn {
@@ -128,220 +100,28 @@ body {
     }
 }
 
-.tab-content h2 {
-    color: #667eea;
-    margin-bottom: 25px;
-    font-size: 2em;
-    border-bottom: 3px solid #667eea;
-    padding-bottom: 15px;
-    flex-shrink: 0;
-}
-
-.materials-container {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    flex: 1;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.images-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    contain: layout style paint;
-    will-change: scroll-position;
-}
-
-.pdf-loading {
-    text-align: center;
-    padding: 60px 20px;
-    color: #667eea;
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
-.pdf-error {
-    text-align: center;
-    padding: 40px 20px;
-    color: #e74c3c;
-}
-
-.pdf-error p {
-    margin-bottom: 20px;
-    font-size: 1.1em;
-}
-
-.pdf-page-wrapper {
-    margin-bottom: 30px;
-    display: flex;
-    flex-direction: column;
+    gap: 30px;
     align-items: center;
-    contain: layout style paint;
-    content-visibility: auto;
 }
 
-.pdf-page-number {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9em;
-    font-weight: 600;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-}
-
-.pdf-page-image {
+.lecture-image {
     max-width: 100%;
+    width: 100%;
     height: auto;
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: block;
-    margin: 0 auto;
     background: white;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    will-change: transform;
-    transform: translateZ(0); /* Hardware acceleration */
-    backface-visibility: hidden;
+    display: block;
 }
 
-.pdf-viewer-placeholder {
+.placeholder {
     text-align: center;
     padding: 60px 20px;
     color: #999;
-    font-size: 1.1em;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.pdf-viewer {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 12px;
-    flex: 1;
-    display: block;
-}
-
-object.pdf-viewer,
-embed.pdf-viewer {
-    display: block;
-}
-
-.pdf-fallback {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.pdf-download-link {
-    display: inline-block;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-}
-
-.pdf-download-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
-}
-
-.pdf-content {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    line-height: 1.8;
-    font-size: 1.05em;
-    color: #333;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.pdf-content h3 {
-    color: #667eea;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    font-size: 1.5em;
-}
-
-.pdf-content h4 {
-    color: #764ba2;
-    margin-top: 25px;
-    margin-bottom: 12px;
-    font-size: 1.3em;
-}
-
-.pdf-content p {
-    margin-bottom: 15px;
-}
-
-.pdf-content ul, .pdf-content ol {
-    margin-left: 30px;
-    margin-bottom: 20px;
-}
-
-.pdf-content li {
-    margin-bottom: 10px;
-}
-
-.pdf-content code {
-    background: #f4f4f4;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    color: #e83e8c;
-}
-
-.pdf-content pre {
-    background: #f4f4f4;
-    padding: 15px;
-    border-radius: 8px;
-    overflow-x: auto;
-    margin-bottom: 20px;
-}
-
-.pdf-content blockquote {
-    border-left: 4px solid #667eea;
-    padding-left: 20px;
-    margin-left: 0;
-    color: #666;
-    font-style: italic;
-}
-
-.pdf-content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.pdf-content table th,
-.pdf-content table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-.pdf-content table th {
-    background: #667eea;
-    color: white;
-    font-weight: 600;
-}
-
-.pdf-content table tr:nth-child(even) {
-    background: #f9f9f9;
-}
-
-.pdf-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin: 20px 0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.2em;
 }
 
 /* Scrollbar styling */
@@ -369,12 +149,7 @@ embed.pdf-viewer {
 /* Responsive design */
 @media (max-width: 1024px) {
     .sidebar {
-        width: 280px;
-    }
-
-    .tab-button {
-        padding: 12px 14px;
-        font-size: 0.9em;
+        width: 250px;
     }
 }
 
@@ -385,9 +160,6 @@ embed.pdf-viewer {
 
     .container {
         height: calc(100vh - 20px);
-    }
-
-    .main-wrapper {
         flex-direction: column;
     }
 
@@ -398,62 +170,31 @@ embed.pdf-viewer {
         border-bottom: 2px solid #e0e0e0;
     }
 
-    .tabs {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 10px;
+    .nav-title {
+        padding: 15px 20px 10px;
+        font-size: 1.2em;
     }
 
-    .tab-button {
-        flex-direction: column;
-        min-width: 120px;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .lecture-title {
-        font-size: 0.85em;
-    }
-
-    .tab-button:hover {
-        transform: translateY(-2px);
-    }
-
-    .tab-button.active {
-        transform: translateY(-2px);
+    .lecture-link {
+        padding: 12px 20px;
+        font-size: 0.9em;
     }
 
     .content {
         padding: 20px;
     }
 
-    .tab-content h2 {
-        font-size: 1.5em;
-    }
-
-    .pdf-viewer {
-        min-height: 500px;
+    .images-container {
+        gap: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .tab-button {
-        min-width: 100px;
-        padding: 8px;
-        font-size: 0.8em;
-    }
-
-    .lecture-number {
-        width: 28px;
-        height: 28px;
-        font-size: 0.8em;
-    }
-
     .content {
         padding: 15px;
     }
 
-    .materials-container {
-        padding: 0;
+    .images-container {
+        gap: 15px;
     }
 }

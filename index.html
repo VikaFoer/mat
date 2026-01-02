@@ -3,188 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; worker-src 'self' blob: https: cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; object-src 'self' https:;">
     <title>Дискретна математика - Навчальний портал</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Load PDF.js always to render PDFs as images and avoid navigation recursion -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <div class="main-wrapper">
-            <aside class="sidebar">
-                <nav class="tabs">
-                    <button class="tab-button active" data-tab="lecture1">
-                        <span class="lecture-number">1</span>
-                        <span class="lecture-title">Основи теорії множин</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture2">
-                        <span class="lecture-number">2</span>
-                        <span class="lecture-title">Основи теорії множин та відношень</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture3">
-                        <span class="lecture-number">3</span>
-                        <span class="lecture-title">Теорія відношень</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture4">
-                        <span class="lecture-number">4</span>
-                        <span class="lecture-title">Елементарні булеві функції</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture5">
-                        <span class="lecture-number">5</span>
-                        <span class="lecture-title">ДНФ, КНФ</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture6">
-                        <span class="lecture-number">6</span>
-                        <span class="lecture-title">Пост. Аналіз КС</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture7">
-                        <span class="lecture-number">7</span>
-                        <span class="lecture-title">Синтез КС, Карно</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture8">
-                        <span class="lecture-number">8</span>
-                        <span class="lecture-title">Мінімізація часткових, Квайн</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture9">
-                        <span class="lecture-number">9</span>
-                        <span class="lecture-title">Мінімізація, Лог.елементи</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture10">
-                        <span class="lecture-number">10</span>
-                        <span class="lecture-title">Основи кодування</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture11">
-                        <span class="lecture-number">11</span>
-                        <span class="lecture-title">Комбінаторика</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture12">
-                        <span class="lecture-number">12</span>
-                        <span class="lecture-title">Комбінаторика</span>
-                    </button>
-                    <button class="tab-button" data-tab="lecture13">
-                        <span class="lecture-number">13</span>
-                        <span class="lecture-title">Комбінаторика</span>
-                    </button>
-                </nav>
-            </aside>
+        <aside class="sidebar">
+            <nav class="lectures-nav">
+                <h2 class="nav-title">Лекції</h2>
+                <ul class="lectures-list">
+                    <li><a href="#lecture1" class="lecture-link active" data-lecture="1">Лекція 1: Основи теорії множин</a></li>
+                    <li><a href="#lecture2" class="lecture-link" data-lecture="2">Лекція 2: Основи теорії множин та відношень</a></li>
+                    <li><a href="#lecture3" class="lecture-link" data-lecture="3">Лекція 3: Теорія відношень</a></li>
+                    <li><a href="#lecture4" class="lecture-link" data-lecture="4">Лекція 4: Елементарні булеві функції</a></li>
+                    <li><a href="#lecture5" class="lecture-link" data-lecture="5">Лекція 5: ДНФ, КНФ</a></li>
+                    <li><a href="#lecture6" class="lecture-link" data-lecture="6">Лекція 6: Пост. Аналіз КС</a></li>
+                    <li><a href="#lecture7" class="lecture-link" data-lecture="7">Лекція 7: Синтез КС, Карно</a></li>
+                    <li><a href="#lecture8" class="lecture-link" data-lecture="8">Лекція 8: Мінімізація часткових, Квайн</a></li>
+                    <li><a href="#lecture9" class="lecture-link" data-lecture="9">Лекція 9: Мінімізація, Лог.елементи</a></li>
+                    <li><a href="#lecture10" class="lecture-link" data-lecture="10">Лекція 10: Основи кодування</a></li>
+                    <li><a href="#lecture11" class="lecture-link" data-lecture="11">Лекція 11: Комбінаторика</a></li>
+                    <li><a href="#lecture12" class="lecture-link" data-lecture="12">Лекція 12: Комбінаторика</a></li>
+                    <li><a href="#lecture13" class="lecture-link" data-lecture="13">Лекція 13: Комбінаторика</a></li>
+                </ul>
+            </nav>
+        </aside>
 
-            <main class="content">
-            <!-- Лекція 1 -->
-            <div class="tab-content active" id="lecture1">
-                <div class="materials-container" id="lecture1-pages">
-                    <div class="pdf-loading">Завантаження PDF...</div>
+        <main class="content">
+            <div class="lecture-content active" id="lecture1">
+                <div class="images-container" id="lecture1-images">
+                    <!-- Images will be loaded here -->
                 </div>
             </div>
 
-            <!-- Лекція 2 -->
-            <div class="tab-content" id="lecture2">
-                <div class="materials-container" id="lecture2-pages">
-                    <div class="pdf-loading">Завантаження PDF...</div>
+            <div class="lecture-content" id="lecture2">
+                <div class="images-container" id="lecture2-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 3 -->
-            <div class="tab-content" id="lecture3">
-                <div class="materials-container" id="lecture3-pages">
-                    <div class="pdf-loading">Завантаження PDF...</div>
+            <div class="lecture-content" id="lecture3">
+                <div class="images-container" id="lecture3-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 4 -->
-            <div class="tab-content" id="lecture4">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture4">
+                <div class="images-container" id="lecture4-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 5 -->
-            <div class="tab-content" id="lecture5">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture5">
+                <div class="images-container" id="lecture5-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 6 -->
-            <div class="tab-content" id="lecture6">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture6">
+                <div class="images-container" id="lecture6-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 7 -->
-            <div class="tab-content" id="lecture7">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture7">
+                <div class="images-container" id="lecture7-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 8 -->
-            <div class="tab-content" id="lecture8">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture8">
+                <div class="images-container" id="lecture8-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 9 -->
-            <div class="tab-content" id="lecture9">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture9">
+                <div class="images-container" id="lecture9-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 10 -->
-            <div class="tab-content" id="lecture10">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture10">
+                <div class="images-container" id="lecture10-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 11 -->
-            <div class="tab-content" id="lecture11">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture11">
+                <div class="images-container" id="lecture11-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 12 -->
-            <div class="tab-content" id="lecture12">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture12">
+                <div class="images-container" id="lecture12-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
 
-            <!-- Лекція 13 -->
-            <div class="tab-content" id="lecture13">
-                <div class="materials-container">
-                    <div class="pdf-viewer-placeholder">
-                        <p>Матеріали будуть додані після завантаження PDF</p>
-                    </div>
+            <div class="lecture-content" id="lecture13">
+                <div class="images-container" id="lecture13-images">
+                    <p class="placeholder">Матеріали будуть додані</p>
                 </div>
             </div>
-            </main>
-        </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
