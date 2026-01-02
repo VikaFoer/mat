@@ -1,5 +1,21 @@
-// Configure PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+// Configure PDF.js worker with CSP compatibility
+// Check if we're on a production server (Railway, etc.) where CSP might block workers
+const isProduction = window.location.hostname.includes('railway') || 
+                     window.location.hostname.includes('vercel') ||
+                     window.location.hostname.includes('netlify') ||
+                     window.location.protocol === 'https:';
+
+if (!isProduction) {
+    // On localhost, try to use worker
+    try {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    } catch (e) {
+        console.warn('Could not set worker source:', e);
+    }
+} else {
+    // On production, we'll use disableWorker: true to avoid CSP issues
+    console.log('Production environment detected, will use main thread for PDF rendering');
+}
 
 // Cache for rendered pages
 const renderedPagesCache = new Map();
@@ -84,14 +100,48 @@ async function renderPDFAsImages(pdfPath, containerId) {
     container.innerHTML = '<div class="pdf-loading">Завантаження PDF...</div>';
 
     try {
-        // Load PDF
+        // First, check if file exists by trying to fetch it
+        let fileExists = true;
+        try {
+            const response = await fetch(pdfPath, { method: 'HEAD' });
+            if (!response.ok) {
+                if (response.status === 404) {
+                    fileExists = false;
+                    throw new Error(`PDF файл "${pdfPath}" не знайдено (404). Перевірте, чи файл існує та чи правильна назва файлу.`);
+                } else if (!response.ok) {
+                    console.warn(`File exists but returned status ${response.status}`);
+                }
+            }
+        } catch (fetchError) {
+            // If fetch fails, try to load PDF anyway (might be CORS issue or local file)
+            if (fetchError.message.includes('404')) {
+                fileExists = false;
+                throw fetchError;
+            }
+            console.warn('Could not verify file existence (might be CORS or local file):', fetchError);
+        }
+
+        // Load PDF with better error handling and CSP compatibility
+        // Use main thread on production to avoid CSP issues with workers
         const loadingTask = pdfjsLib.getDocument({
             url: pdfPath,
             cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
             cMapPacked: true,
+            verbosity: 0, // Reduce console warnings
+            stopAtErrors: false, // Continue even with errors
+            useSystemFonts: false, // Better compatibility
+            disableAutoFetch: false,
+            disableStream: false,
+            disableWorker: isProduction, // Disable worker on production to avoid CSP issues
         });
+        
         const pdf = await loadingTask.promise;
         const numPages = pdf.numPages;
+        
+        // If we got here but numPages is 0 or invalid, there might be an issue
+        if (!numPages || numPages <= 0) {
+            throw new Error('PDF файл порожній або пошкоджений');
+        }
 
         // Calculate optimal scale
         const containerWidth = container.offsetWidth || 1200;
@@ -126,15 +176,63 @@ async function renderPDFAsImages(pdfPath, containerId) {
         // Cache the rendered content
         renderedPagesCache.set(cacheKey, container.innerHTML);
     } catch (error) {
-        console.error('Error loading PDF:', error);
-        container.innerHTML = `
-            <div class="pdf-error">
-                <p>Помилка завантаження PDF: ${error.message}</p>
-                <a href="${pdfPath}" target="_blank" class="pdf-download-link">
-                    📄 Відкрити PDF у новому вікні
-                </a>
-            </div>
-        `;
+        console.error('Error loading PDF with PDF.js:', error);
+        
+        // Immediately try fallback to iframe/object viewer
+        const errorMessage = error.message || 'Невідома помилка';
+        
+        // Clear container and try iframe/object fallback
+        container.innerHTML = '';
+        
+        // Create iframe as primary fallback (works better than object in most browsers)
+        const iframe = document.createElement('iframe');
+        iframe.className = 'pdf-viewer';
+        iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
+        iframe.type = 'application/pdf';
+        iframe.style.width = '100%';
+        iframe.style.height = '800px';
+        iframe.style.border = 'none';
+        iframe.style.borderRadius = '8px';
+        iframe.style.minHeight = '600px';
+        
+        // Add error handler for iframe
+        iframe.onerror = () => {
+            container.innerHTML = `
+                <div class="pdf-error">
+                    <p>Помилка завантаження PDF: ${errorMessage}</p>
+                    <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                        Можливі причини:<br>
+                        • Файл не існує або має неправильну назву<br>
+                        • PDF файл пошкоджений<br>
+                        • Проблеми з доступом до файлу<br>
+                        • Браузер не підтримує вбудований перегляд PDF
+                    </p>
+                    <a href="${pdfPath}" target="_blank" class="pdf-download-link" style="margin-top: 20px; display: inline-block;">
+                        📄 Відкрити PDF у новому вікні
+                    </a>
+                </div>
+            `;
+        };
+        
+        // Add fallback link
+        const fallbackLink = document.createElement('p');
+        fallbackLink.className = 'pdf-fallback';
+        fallbackLink.style.marginTop = '20px';
+        fallbackLink.style.textAlign = 'center';
+        const link = document.createElement('a');
+        link.href = pdfPath;
+        link.target = '_blank';
+        link.className = 'pdf-download-link';
+        link.textContent = '📄 Відкрити PDF у новому вікні';
+        fallbackLink.appendChild(link);
+        
+        container.appendChild(iframe);
+        container.appendChild(fallbackLink);
+        
+        // Also try to detect if iframe loaded successfully
+        iframe.onload = () => {
+            console.log('PDF loaded successfully in iframe');
+        };
     }
 }
 
