@@ -21,6 +21,16 @@ const lectureImages = {
         '1 лекція/18_Diagrami-Venna.png',
         '1 лекція/19_Algebra-mnozhin-osnovni-operaciyi.png'
     ],
+    2: [
+        '2 лекція/1_Diskretna-matematika.png',
+        '2 лекція/2_Prioritet-operacij-v-algebri-mnozhin.png',
+        '2 лекція/3_Zakoni-algebri-mnozhin.png',
+        '2 лекція/4_Vlastivosti-riznici-ta-priklad-dovedennya.png',
+        '2 лекція/5_Potuzhnist-mnozhin-vzayemno-odnoznachna-vidpovidnist.png',
+        '2 лекція/6_Zlichenni-ta-kontinualni-mnozhini.png',
+        '2 лекція/7_Zadacha-pro-meteosposterezhennya.png',
+        '2 лекція/8_Dekartovij-dobutok-mnozhin.png'
+    ],
     3: [
         '3 лекція/1_Diskretna-matematika.png',
         '3 лекція/2_Sposobi-zadannya-vidnoshen.png',
