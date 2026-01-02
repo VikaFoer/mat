@@ -1,5 +1,26 @@
 // Images for each lecture
 const lectureImages = {
+    1: [
+        '1 лекція/1_Diskretna-matematika.png',
+        '1 лекція/2_Diskretna-matematika-diskretnij-analiz-skinchenna-matematika-ce-rozdil-suchasnoyi-matematiki-v-yakom.png',
+        '1 лекція/3_Rozdili-diskretnoyi-matematiki.png',
+        '1 лекція/4_Zastosuvannya-diskretnoyi-matematiki.png',
+        '1 лекція/5_Literatura-za-kursom.png',
+        '1 лекція/6_Mnozhina-Elementi-mnozhin.png',
+        '1 лекція/7_Prikladi-mnozhin.png',
+        '1 лекція/8_Poznachennya-i-tipi-mnozhin.png',
+        '1 лекція/9_Rivnist-ta-vklyuchennya-mnozhin.png',
+        '1 лекція/10_Chislovi-mnozhini.png',
+        '1 лекція/11_Skinchenni-ta-neskinchenni-mnozhini.png',
+        '1 лекція/12_Potuzhnist-mnozhini-ta-bulean.png',
+        '1 лекція/13_Uporyadkovani-ta-specialni-mnozhini.png',
+        '1 лекція/14_Sposobi-zadannya-mnozhin.png',
+        '1 лекція/15_Procedura-porodzhennya-elementiv.png',
+        '1 лекція/16_Geometrichna-interpretaciya-mnozhin.png',
+        '1 лекція/17_Diagrami-Ejlera-prikladi.png',
+        '1 лекція/18_Diagrami-Venna.png',
+        '1 лекція/19_Algebra-mnozhin-osnovni-operaciyi.png'
+    ],
     3: [
         '3 лекція/1_Diskretna-matematika.png',
         '3 лекція/2_Sposobi-zadannya-vidnoshen.png',
