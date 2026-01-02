@@ -116,8 +116,8 @@ async function renderPDFAsImages(pdfPath, containerId) {
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
-        // Add sandbox to prevent navigation issues
-        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
+        // Don't use sandbox for PDF iframes as it blocks PDF rendering
+        // Instead, rely on browser's built-in PDF security
         iframe.setAttribute('loading', 'lazy');
         
         const fallbackLink = document.createElement('p');
@@ -247,8 +247,8 @@ async function renderPDFAsImages(pdfPath, containerId) {
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
-        // Add sandbox to prevent navigation issues
-        iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-popups allow-forms');
+        // Don't use sandbox for PDF iframes as it blocks PDF rendering
+        // Instead, rely on browser's built-in PDF security
         iframe.setAttribute('loading', 'lazy');
         
         // Add error handler for iframe
