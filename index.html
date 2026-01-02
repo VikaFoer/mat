@@ -8,15 +8,18 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Load PDF.js only on localhost, use iframe on production -->
     <script>
-        // Check if we're on localhost
-        const isLocalhost = window.location.hostname === 'localhost' || 
-                           window.location.hostname === '127.0.0.1' ||
-                           window.location.hostname === '';
-        if (isLocalhost) {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-            document.head.appendChild(script);
-        }
+        // Check if we're on localhost (without declaring const to avoid conflicts)
+        (function() {
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || 
+                          hostname === '127.0.0.1' ||
+                          hostname === '';
+            if (isLocal) {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                document.head.appendChild(script);
+            }
+        })();
     </script>
 </head>
 <body>
