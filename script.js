@@ -1,15 +1,15 @@
 // Images for each lecture
 const lectureImages = {
-    1: [
-        '1 лекція/1_Diskretna-matematika.png',
-        '1 лекція/2_Sposobi-zadannya-vidnoshen.png',
-        '1 лекція/3_Priklad-matrichnogo-sposobu.png',
-        '1 лекція/4_Grafichnij-sposib-zadannya-vidnoshen.png',
-        '1 лекція/5_Vlastivosti-odnoridnih-binarnih-vidnoshen.png',
-        '1 лекція/6_Vlastivosti-vidnoshen-simetriya.png',
-        '1 лекція/7_Specialni-binarni-vidnoshennya-ekvivalentnist.png',
-        '1 лекція/8_Vidnoshennya-poryadku.png',
-        '1 лекція/9_Diagrami-Gasse-ta-vidnoshennya-tolerantnosti.png'
+    3: [
+        '3 лекція/1_Diskretna-matematika.png',
+        '3 лекція/2_Sposobi-zadannya-vidnoshen.png',
+        '3 лекція/3_Priklad-matrichnogo-sposobu.png',
+        '3 лекція/4_Grafichnij-sposib-zadannya-vidnoshen.png',
+        '3 лекція/5_Vlastivosti-odnoridnih-binarnih-vidnoshen.png',
+        '3 лекція/6_Vlastivosti-vidnoshen-simetriya.png',
+        '3 лекція/7_Specialni-binarni-vidnoshennya-ekvivalentnist.png',
+        '3 лекція/8_Vidnoshennya-poryadku.png',
+        '3 лекція/9_Diagrami-Gasse-ta-vidnoshennya-tolerantnosti.png'
     ]
     // Add more lectures as needed
 };
@@ -83,6 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Load images for lecture 1 on page load
-    loadLectureImages(1);
+    // Set lecture 1 as active by default
+    const firstLink = document.querySelector('.lecture-link[data-lecture="1"]');
+    const firstContent = document.getElementById('lecture1');
+    if (firstLink && firstContent) {
+        firstLink.classList.add('active');
+        firstContent.classList.add('active');
+    }
 });
