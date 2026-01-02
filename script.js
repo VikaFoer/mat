@@ -9,15 +9,13 @@ const isLocalhost = window.location.hostname === 'localhost' ||
                    window.location.hostname === '127.0.0.1' ||
                    window.location.hostname === '';
 
-// Only configure PDF.js if it's loaded (on localhost)
-if (isLocalhost && typeof pdfjsLib !== 'undefined') {
+// Configure PDF.js worker - use main thread on production to avoid CSP issues
+if (typeof pdfjsLib !== 'undefined') {
     try {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     } catch (e) {
         console.warn('Could not set worker source:', e);
     }
-} else if (isProduction) {
-    console.log('Production environment detected, using iframe for PDF rendering');
 }
 
 // Cache for rendered pages
@@ -103,15 +101,16 @@ async function renderPDFAsImages(pdfPath, containerId) {
     }
     loadedPDFs.add(pdfKey);
 
-    // On production, use iframe directly to avoid CSP issues
-    if (isProduction) {
+    // Always try to use PDF.js first to render as images (no navigation possible)
+    // Only fallback to iframe if PDF.js fails
+    if (typeof pdfjsLib === 'undefined') {
+        // PDF.js not available, use iframe as fallback
         container.innerHTML = '';
         
-        // Use iframe with navpanes=0 to prevent navigation recursion
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        // Disable navpanes to prevent recursion, use view=FitH for proper scaling
-        iframe.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+        // Completely disable all navigation
+        iframe.src = pdfPath + '#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
         iframe.style.height = '800px';
@@ -169,12 +168,16 @@ async function renderPDFAsImages(pdfPath, containerId) {
         }
 
         // Load PDF with better error handling and CSP compatibility
-        // Check if PDF.js is available (only on localhost)
+        // PDF.js should be loaded now (we load it in HTML)
         if (typeof pdfjsLib === 'undefined') {
-            throw new Error('PDF.js не завантажено. Використовується iframe fallback.');
+            // If still not available, wait a bit and try again
+            await new Promise(resolve => setTimeout(resolve, 500));
+            if (typeof pdfjsLib === 'undefined') {
+                throw new Error('PDF.js не завантажено. Використовується iframe fallback.');
+            }
         }
 
-        // Use main thread on localhost to avoid CSP issues
+        // Use main thread on production to avoid CSP issues with workers
         const loadingTask = pdfjsLib.getDocument({
             url: pdfPath,
             cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
@@ -184,7 +187,7 @@ async function renderPDFAsImages(pdfPath, containerId) {
             useSystemFonts: false, // Better compatibility
             disableAutoFetch: false,
             disableStream: false,
-            disableWorker: false, // Use worker on localhost
+            disableWorker: isProduction, // Disable worker on production to avoid CSP issues
         });
         
         const pdf = await loadingTask.promise;

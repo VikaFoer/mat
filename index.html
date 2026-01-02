@@ -6,21 +6,8 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: blob:; worker-src 'self' blob: https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; object-src 'self' https:;">
     <title>Дискретна математика - Навчальний портал</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Load PDF.js only on localhost, use iframe on production -->
-    <script>
-        // Check if we're on localhost (without declaring const to avoid conflicts)
-        (function() {
-            const hostname = window.location.hostname;
-            const isLocal = hostname === 'localhost' || 
-                          hostname === '127.0.0.1' ||
-                          hostname === '';
-            if (isLocal) {
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-                document.head.appendChild(script);
-            }
-        })();
-    </script>
+    <!-- Load PDF.js always to render PDFs as images and avoid navigation recursion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <div class="container">
