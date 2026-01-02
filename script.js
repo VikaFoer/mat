@@ -335,6 +335,17 @@ document.addEventListener('DOMContentLoaded', function() {
             renderPDFAsImages('Diskretna-matematika (1).pdf', 'lecture2-pages');
         }
     });
+    
+    // Load PDF for lecture 3 when tab is activated
+    const lecture3Button = document.querySelector('[data-tab="lecture3"]');
+    let lecture3Loaded = false;
+    
+    lecture3Button.addEventListener('click', () => {
+        if (!lecture3Loaded) {
+            lecture3Loaded = true;
+            renderPDFAsImages('Diskretna-matematika (2).pdf', 'lecture3-pages');
+        }
+    });
 });
 
 // Function to add PDF content to a specific lecture tab
