@@ -3,18 +3,21 @@
 const isProduction = window.location.hostname.includes('railway') || 
                      window.location.hostname.includes('vercel') ||
                      window.location.hostname.includes('netlify') ||
-                     window.location.protocol === 'https:';
+                     (window.location.protocol === 'https:' && !window.location.hostname.includes('localhost'));
 
-if (!isProduction) {
-    // On localhost, try to use worker
+const isLocalhost = window.location.hostname === 'localhost' || 
+                   window.location.hostname === '127.0.0.1' ||
+                   window.location.hostname === '';
+
+// Only configure PDF.js if it's loaded (on localhost)
+if (isLocalhost && typeof pdfjsLib !== 'undefined') {
     try {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     } catch (e) {
         console.warn('Could not set worker source:', e);
     }
-} else {
-    // On production, we'll use disableWorker: true to avoid CSP issues
-    console.log('Production environment detected, will use main thread for PDF rendering');
+} else if (isProduction) {
+    console.log('Production environment detected, using iframe for PDF rendering');
 }
 
 // Cache for rendered pages
@@ -89,6 +92,35 @@ async function renderPDFAsImages(pdfPath, containerId) {
         return;
     }
 
+    // On production, use iframe directly to avoid CSP issues
+    if (isProduction) {
+        container.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.className = 'pdf-viewer';
+        iframe.src = pdfPath + '#toolbar=1&navpanes=1&scrollbar=1';
+        iframe.type = 'application/pdf';
+        iframe.style.width = '100%';
+        iframe.style.height = '800px';
+        iframe.style.border = 'none';
+        iframe.style.borderRadius = '8px';
+        iframe.style.minHeight = '600px';
+        
+        const fallbackLink = document.createElement('p');
+        fallbackLink.className = 'pdf-fallback';
+        fallbackLink.style.marginTop = '20px';
+        fallbackLink.style.textAlign = 'center';
+        const link = document.createElement('a');
+        link.href = pdfPath;
+        link.target = '_blank';
+        link.className = 'pdf-download-link';
+        link.textContent = '📄 Відкрити PDF у новому вікні';
+        fallbackLink.appendChild(link);
+        
+        container.appendChild(iframe);
+        container.appendChild(fallbackLink);
+        return;
+    }
+
     // Check cache
     const cacheKey = `${pdfPath}-${containerId}`;
     if (renderedPagesCache.has(cacheKey)) {
@@ -122,7 +154,12 @@ async function renderPDFAsImages(pdfPath, containerId) {
         }
 
         // Load PDF with better error handling and CSP compatibility
-        // Use main thread on production to avoid CSP issues with workers
+        // Check if PDF.js is available (only on localhost)
+        if (typeof pdfjsLib === 'undefined') {
+            throw new Error('PDF.js не завантажено. Використовується iframe fallback.');
+        }
+
+        // Use main thread on localhost to avoid CSP issues
         const loadingTask = pdfjsLib.getDocument({
             url: pdfPath,
             cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
@@ -132,7 +169,7 @@ async function renderPDFAsImages(pdfPath, containerId) {
             useSystemFonts: false, // Better compatibility
             disableAutoFetch: false,
             disableStream: false,
-            disableWorker: isProduction, // Disable worker on production to avoid CSP issues
+            disableWorker: false, // Use worker on localhost
         });
         
         const pdf = await loadingTask.promise;
