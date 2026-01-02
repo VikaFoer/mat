@@ -41,6 +41,18 @@ const lectureImages = {
         '3 лекція/7_Specialni-binarni-vidnoshennya-ekvivalentnist.png',
         '3 лекція/8_Vidnoshennya-poryadku.png',
         '3 лекція/9_Diagrami-Gasse-ta-vidnoshennya-tolerantnosti.png'
+    ],
+    4: [
+        '4 лекція/1_Buleva-algebra.png',
+        '4 лекція/2_Dzhordzh-Bul-zasnovnik-bulevoyi-algebri.png',
+        '4 лекція/3_Bulevi-zminni-ta-funkciyi-osnovni-ponyattya.png',
+        '4 лекція/4_Sposobi-zadannya-bulevih-funkcij.png',
+        '4 лекція/5_Bulevi-funkciyi-odniyeyi-ta-dvoh-zminnih.png',
+        '4 лекція/6_Zakoni-bulevoyi-algebri.png',
+        '4 лекція/7_Vlastivosti-osnovnih-logichnih-operacij.png',
+        '4 лекція/8_Bulevi-funkciyi-bagatoh-zminnih.png',
+        '4 лекція/9_Prioritet-operacij-ta-zvyazok-z-teoriyeyu-mnozhin.png',
+        '4 лекція/10_Praktichnij-priklad-analiz-mnozhin.png'
     ]
     // Add more lectures as needed
 };
