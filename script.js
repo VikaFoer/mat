@@ -319,6 +319,7 @@ async function renderPDFAsImages(pdfPath, containerId) {
         link.textContent = '📄 Відкрити PDF у новому вікні';
         fallbackLink.appendChild(link);
         
+        container.appendChild(embed);
         container.appendChild(iframe);
         container.appendChild(fallbackLink);
         
