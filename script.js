@@ -107,23 +107,10 @@ async function renderPDFAsImages(pdfPath, containerId) {
     if (isProduction) {
         container.innerHTML = '';
         
-        // Use embed instead of iframe to avoid navigation recursion
-        const embed = document.createElement('embed');
-        embed.className = 'pdf-viewer';
-        // Disable all navigation to prevent recursion
-        embed.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
-        embed.type = 'application/pdf';
-        embed.style.width = '100%';
-        embed.style.height = '800px';
-        embed.style.border = 'none';
-        embed.style.borderRadius = '8px';
-        embed.style.minHeight = '600px';
-        embed.setAttribute('loading', 'lazy');
-        
-        // Fallback iframe (will only load if embed fails)
+        // Use iframe with navpanes=0 to prevent navigation recursion
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        iframe.style.display = 'none';
+        // Disable navpanes to prevent recursion, use view=FitH for proper scaling
         iframe.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
@@ -132,12 +119,6 @@ async function renderPDFAsImages(pdfPath, containerId) {
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
         iframe.setAttribute('loading', 'lazy');
-        
-        // Check if embed works, fallback to iframe
-        embed.onerror = () => {
-            embed.style.display = 'none';
-            iframe.style.display = 'block';
-        };
         
         const fallbackLink = document.createElement('p');
         fallbackLink.className = 'pdf-fallback';
@@ -150,7 +131,6 @@ async function renderPDFAsImages(pdfPath, containerId) {
         link.textContent = '📄 Відкрити PDF у новому вікні';
         fallbackLink.appendChild(link);
         
-        container.appendChild(embed);
         container.appendChild(iframe);
         container.appendChild(fallbackLink);
         return;
@@ -256,23 +236,10 @@ async function renderPDFAsImages(pdfPath, containerId) {
         // Clear container and try iframe/object fallback
         container.innerHTML = '';
         
-        // Create embed as primary fallback to avoid navigation recursion
-        const embed = document.createElement('embed');
-        embed.className = 'pdf-viewer';
-        // Disable navpanes to prevent recursion/navigation issues
-        embed.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
-        embed.type = 'application/pdf';
-        embed.style.width = '100%';
-        embed.style.height = '800px';
-        embed.style.border = 'none';
-        embed.style.borderRadius = '8px';
-        embed.style.minHeight = '600px';
-        embed.setAttribute('loading', 'lazy');
-        
-        // Fallback iframe
+        // Create iframe as primary fallback to avoid navigation recursion
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        iframe.style.display = 'none';
+        // Disable navpanes to prevent recursion/navigation issues
         iframe.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
@@ -281,12 +248,6 @@ async function renderPDFAsImages(pdfPath, containerId) {
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
         iframe.setAttribute('loading', 'lazy');
-        
-        // Check if embed works, fallback to iframe
-        embed.onerror = () => {
-            embed.style.display = 'none';
-            iframe.style.display = 'block';
-        };
         
         // Add error handler for iframe
         iframe.onerror = () => {
