@@ -106,19 +106,38 @@ async function renderPDFAsImages(pdfPath, containerId) {
     // On production, use iframe directly to avoid CSP issues
     if (isProduction) {
         container.innerHTML = '';
+        
+        // Use embed instead of iframe to avoid navigation recursion
+        const embed = document.createElement('embed');
+        embed.className = 'pdf-viewer';
+        // Disable all navigation to prevent recursion
+        embed.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+        embed.type = 'application/pdf';
+        embed.style.width = '100%';
+        embed.style.height = '800px';
+        embed.style.border = 'none';
+        embed.style.borderRadius = '8px';
+        embed.style.minHeight = '600px';
+        embed.setAttribute('loading', 'lazy');
+        
+        // Fallback iframe (will only load if embed fails)
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        // Remove navpanes to prevent recursion/navigation issues
-        iframe.src = pdfPath + '#toolbar=1&scrollbar=1';
+        iframe.style.display = 'none';
+        iframe.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
         iframe.style.height = '800px';
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
-        // Don't use sandbox for PDF iframes as it blocks PDF rendering
-        // Instead, rely on browser's built-in PDF security
         iframe.setAttribute('loading', 'lazy');
+        
+        // Check if embed works, fallback to iframe
+        embed.onerror = () => {
+            embed.style.display = 'none';
+            iframe.style.display = 'block';
+        };
         
         const fallbackLink = document.createElement('p');
         fallbackLink.className = 'pdf-fallback';
@@ -131,6 +150,7 @@ async function renderPDFAsImages(pdfPath, containerId) {
         link.textContent = '📄 Відкрити PDF у новому вікні';
         fallbackLink.appendChild(link);
         
+        container.appendChild(embed);
         container.appendChild(iframe);
         container.appendChild(fallbackLink);
         return;
@@ -236,20 +256,37 @@ async function renderPDFAsImages(pdfPath, containerId) {
         // Clear container and try iframe/object fallback
         container.innerHTML = '';
         
-        // Create iframe as primary fallback (works better than object in most browsers)
+        // Create embed as primary fallback to avoid navigation recursion
+        const embed = document.createElement('embed');
+        embed.className = 'pdf-viewer';
+        // Disable navpanes to prevent recursion/navigation issues
+        embed.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
+        embed.type = 'application/pdf';
+        embed.style.width = '100%';
+        embed.style.height = '800px';
+        embed.style.border = 'none';
+        embed.style.borderRadius = '8px';
+        embed.style.minHeight = '600px';
+        embed.setAttribute('loading', 'lazy');
+        
+        // Fallback iframe
         const iframe = document.createElement('iframe');
         iframe.className = 'pdf-viewer';
-        // Remove navpanes to prevent recursion/navigation issues
-        iframe.src = pdfPath + '#toolbar=1&scrollbar=1';
+        iframe.style.display = 'none';
+        iframe.src = pdfPath + '#toolbar=1&navpanes=0&scrollbar=1&view=FitH';
         iframe.type = 'application/pdf';
         iframe.style.width = '100%';
         iframe.style.height = '800px';
         iframe.style.border = 'none';
         iframe.style.borderRadius = '8px';
         iframe.style.minHeight = '600px';
-        // Don't use sandbox for PDF iframes as it blocks PDF rendering
-        // Instead, rely on browser's built-in PDF security
         iframe.setAttribute('loading', 'lazy');
+        
+        // Check if embed works, fallback to iframe
+        embed.onerror = () => {
+            embed.style.display = 'none';
+            iframe.style.display = 'block';
+        };
         
         // Add error handler for iframe
         iframe.onerror = () => {

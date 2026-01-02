@@ -225,7 +225,8 @@ body {
     display: block;
 }
 
-object.pdf-viewer {
+object.pdf-viewer,
+embed.pdf-viewer {
     display: block;
 }
 
